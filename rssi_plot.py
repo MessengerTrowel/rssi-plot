@@ -182,6 +182,52 @@ fig.savefig("C:/Users/Administrator/rssi_combined.png", bbox_inches="tight")
 plt.close(fig)
 print("saved combined")
 
+# ---- figure (b): RSSI vs distance path-loss fitting -----------------------
+dists = np.array([d for _, d in nodes])
+# pool all three dates per node -> mean & std (full-day spatial statistics)
+means = np.array([
+    np.mean([all_data[date][name] for date in dates]) for name, _ in nodes
+])
+stds = np.array([
+    np.std(np.concatenate([all_data[date][name] for date in dates])) for name, _ in nodes
+])
+# least-squares fit of RSSI = A - 10*n*log10(d)
+X = np.log10(dists)
+A1 = np.vstack([np.ones_like(X), X]).T          # [1, log10(d)]
+coef, *_ = np.linalg.lstsq(A1, means, rcond=None)
+A_fit, slope = coef
+n_fit = -slope / 10.0
+# shadowing/fading std: RMS of ALL individual samples about the fitted model
+all_resid = []
+for name, dist in nodes:
+    pred = A_fit + slope * np.log10(dist)
+    samp = np.concatenate([all_data[date][name] for date in dates])
+    all_resid.append(samp - pred)
+sigma = np.std(np.concatenate(all_resid))
+
+fig, ax = plt.subplots(figsize=(8.0, 6.6), dpi=150)
+dd = np.logspace(np.log10(0.8), np.log10(180), 200)
+ax.plot(dd, A_fit + slope * np.log10(dd), "-", color="#1f4ed8", linewidth=2.2,
+        label=f"\u62df\u5408 Fit: n={n_fit:.2f}, \u03c3={sigma:.1f} dB")
+for (name, dist), (color, marker) in zip(nodes, styles):
+    i = list(d for _, d in nodes).index(dist)
+    ax.errorbar(dist, means[i], yerr=stds[i], fmt=marker, color=color,
+                markersize=11, capsize=6, elinewidth=1.6, markeredgecolor="k",
+                markeredgewidth=0.6, label=f"{name} ({dist:g} m)")
+ax.set_xscale("log")
+ax.set_xlim(0.8, 180)
+ax.set_xticks([1, 5, 10, 35, 60, 100, 150])
+ax.set_xticklabels(["1", "5", "10", "35", "60", "100", "150"], fontsize=20)
+ax.tick_params(axis="y", labelsize=20)
+ax.set_xlabel("\u8ddd\u79bb Distance /m", fontsize=23)
+ax.set_ylabel("\u63a5\u6536\u4fe1\u53f7\u5f3a\u5ea6 RSSI /dBm", fontsize=23)
+ax.grid(True, which="both", linestyle="--", alpha=0.4)
+ax.legend(fontsize=15, loc="upper right", framealpha=0.9)
+fig.tight_layout()
+fig.savefig("C:/Users/Administrator/rssi_distance.png", bbox_inches="tight")
+plt.close(fig)
+print(f"saved distance fig (n={n_fit:.2f}, sigma={sigma:.2f})")
+
 # ---- export CSV
 import csv
 for date in dates:
