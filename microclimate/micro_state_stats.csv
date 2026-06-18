@@ -1,0 +1,10 @@
+﻿veg_soil_moisture,VPD_atmos,RSSI_mean_dBm,RSSI_std_dB,RSSI_peak2peak_dB
+低 Low,低 Low,-65.41,2.89,11.13
+低 Low,中 Mid,-62.39,1.91,7.76
+低 Low,高 High,-59.93,0.90,3.67
+中 Mid,低 Low,-67.43,3.63,14.87
+中 Mid,中 Mid,-65.49,2.90,10.99
+中 Mid,高 High,-62.23,2.00,8.02
+高 High,低 Low,-69.92,5.32,20.84
+高 High,中 Mid,-67.93,3.66,14.41
+高 High,高 High,-64.64,2.86,11.66
