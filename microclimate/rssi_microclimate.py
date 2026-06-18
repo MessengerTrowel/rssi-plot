@@ -192,6 +192,94 @@ plt.close(fig)
 print("saved fig_micro_grid.png")
 
 # ----------------------------------------------------------------------------
+# FIGURE A1 VARIANTS: same line plot, innovative RIGHT-margin distribution
+#   right_kind in {"gradient", "hist", "strip"}
+# ----------------------------------------------------------------------------
+from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.patches import Polygon
+
+
+def build_grid(right_kind, fname, subtitle):
+    fig, axes = plt.subplots(3, 3, figsize=(14.5, 10), sharex=True, sharey=True)
+    for r, mois in enumerate(row_order):
+        for c, vpd_l in enumerate(col_order):
+            ax = axes[r, c]
+            y = series_grid[(mois, vpd_l)]
+            pop = populations[(mois, vpd_l)]
+            color = COL_VPD[vpd_l]
+            ax.plot(t, y, color=color, lw=1.6, marker="o", markersize=3,
+                    markevery=3, alpha=0.95)
+            yy = np.linspace(-80, -52, 200)
+            dens = gaussian_kde(pop)(yy)
+            dens = dens / dens.max() * XW
+            mean = np.mean(pop); med = np.median(pop)
+
+            if right_kind == "gradient":
+                # glowing gradient-filled density peak (moon/ridge look)
+                verts = list(zip(X0 + dens, yy)) + [(X0, yy[-1]), (X0, yy[0])]
+                poly = Polygon(verts, closed=True, facecolor="none",
+                               edgecolor=color, lw=1.3, zorder=4)
+                ax.add_patch(poly)
+                cmap = LinearSegmentedColormap.from_list(
+                    "g", ["white", color], N=256)
+                grad = np.linspace(0, 1, 256).reshape(1, -1)
+                im = ax.imshow(grad, extent=[X0, X0 + XW, yy[0], yy[-1]],
+                               origin="lower", aspect="auto", cmap=cmap,
+                               alpha=0.95, zorder=3)
+                im.set_clip_path(poly)
+                ax.hlines(mean, X0, X0 + np.interp(mean, yy, dens),
+                          color=color, lw=2.2, zorder=5)
+            elif right_kind == "hist":
+                # horizontal marginal histogram bars
+                cnt, edges = np.histogram(pop, bins=16, range=(-80, -52))
+                cnt = cnt / cnt.max() * XW
+                ax.barh((edges[:-1] + edges[1:]) / 2, cnt, left=X0,
+                        height=(edges[1] - edges[0]) * 0.9, color=color,
+                        edgecolor="black", lw=0.5, alpha=0.7, zorder=3)
+                ax.hlines(mean, X0, X0 + XW, color="0.2", lw=1.6, ls="--",
+                          zorder=5)
+            elif right_kind == "strip":
+                # jittered scatter (point cloud / raincloud dots)
+                g = np.random.default_rng(7)
+                sub = g.choice(pop, size=120, replace=False)
+                jit = X0 + 1.0 + g.uniform(0, 1, len(sub)) * (XW - 2)
+                ax.scatter(jit, sub, s=10, color=color, alpha=0.45,
+                           edgecolor="none", zorder=3)
+                ax.scatter([X0 + XW / 2], [mean], s=70, color="white",
+                           edgecolor="black", lw=1.2, zorder=6)
+                ax.hlines(med, X0, X0 + XW, color="0.2", lw=1.4, zorder=5)
+
+            ax.axvline(50.5, color="0.6", lw=0.8, ls=":")
+            st = stats[(mois, vpd_l)]
+            ax.set_title(f"\u6c34\u5206 {mois.split()[0]} | VPD {vpd_l.split()[0]}\n"
+                         f"(\u03c3={st['std']:.1f}, \u5cf0\u8c37\u5dee={st['p2p']:.1f} dB)",
+                         fontsize=17)
+            ax.set_ylim(-80, -52)
+            ax.set_xlim(-2, X0 + XW + 2)
+            ax.set_xticks([0, 10, 20, 30, 40, 50])
+            ax.grid(True, linestyle="--", alpha=0.35)
+            style(ax, fs=17)
+    for c in range(3):
+        axes[2, c].set_xlabel("\u65f6\u95f4 Time /s   (\u53f3\u4fa7: \u5206\u5e03 Distribution)",
+                              fontsize=19)
+    for r in range(3):
+        axes[r, 0].set_ylabel("RSSI /dBm", fontsize=20)
+    fig.suptitle("\u4e0d\u540c\u5fae\u6c14\u5019\u72b6\u6001\u7ec4\u5408\u4e0b\u7684 RSSI \u77ed\u65f6\u5e8f\u5217  "
+                 + subtitle, fontsize=20, y=0.995)
+    fig.tight_layout(rect=(0, 0, 1, 0.98))
+    fig.savefig(f"C:/Users/Administrator/{fname}", bbox_inches="tight")
+    plt.close(fig)
+    print("saved", fname)
+
+
+build_grid("gradient", "fig_micro_grid_gradient.png",
+           "(\u53f3\u4fa7\u6e10\u53d8\u5bc6\u5ea6\u5cf0 gradient density peak)")
+build_grid("hist", "fig_micro_grid_hist.png",
+           "(\u53f3\u4fa7\u8fb9\u9645\u76f4\u65b9\u56fe marginal histogram)")
+build_grid("strip", "fig_micro_grid_strip.png",
+           "(\u53f3\u4fa7\u6296\u52a8\u70b9\u4e91 jittered point cloud)")
+
+# ----------------------------------------------------------------------------
 # FIGURE A2: 3x3 pure-VIOLIN grid (each cell = one violin of that state)
 # ----------------------------------------------------------------------------
 fig, axes = plt.subplots(3, 3, figsize=(14.5, 10), sharex=True, sharey=True)
