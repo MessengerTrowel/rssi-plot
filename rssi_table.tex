@@ -1,0 +1,25 @@
+\begin{table}[htbp]
+  \centering
+  \caption{不同日期下五节点 RSSI 统计特性 / RSSI statistics of the five nodes on different dates}
+  \label{tab:rssi_stats}
+  \begin{tabular}{cccccccc}
+    \toprule
+    \multirow{2}{*}{测点 Point} & \multirow{2}{*}{距离 $d$/m} & \multicolumn{2}{c}{2024-09-01} & \multicolumn{2}{c}{2024-10-05} & \multicolumn{2}{c}{2025-06-15} \\
+    \cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(lr){7-8}
+    & & Mean/dBm & $\sigma$/dB & Mean/dBm & $\sigma$/dB & Mean/dBm & $\sigma$/dB \\
+    \midrule
+    Tx1 & 1 & -31.35 & 1.58 & -29.28 & 1.37 & -30.65 & 1.70 \\
+    Tx2 & 35 & -78.03 & 4.71 & -73.06 & 4.48 & -76.96 & 5.72 \\
+    Tx3 & 60 & -86.19 & 4.75 & -79.64 & 4.79 & -84.66 & 5.44 \\
+    Tx4 & 100 & -93.54 & 5.77 & -85.56 & 5.19 & -90.20 & 7.03 \\
+    Tx5 & 150 & -97.70 & 6.35 & -90.67 & 5.30 & -96.92 & 7.43 \\
+    \midrule
+    平均值 Mean & -- & -77.36 & 4.63 & -71.64 & 4.23 & -75.88 & 5.46 \\
+    \bottomrule
+  \end{tabular}
+  \par\vspace{2pt}
+  \begin{flushleft}\small
+  注 Note: 昼夜差 $\Delta$RSSI（白天10:00--16:00均值 $-$ 夜间均值，三天平均）由近及远依次为 Tx1 1.95 dB, Tx2 10.82 dB, Tx3 10.94 dB, Tx4 13.42 dB, Tx5 14.71 dB. 
+  路径损耗指数 $n=2.97$，阴影衰落 $\sigma=5.73$ dB，$\mathrm{RSSI}(d_0{=}1\,\mathrm{m})\approx-30.4$ dBm.
+  \end{flushleft}
+\end{table}
