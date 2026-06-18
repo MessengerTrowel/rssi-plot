@@ -251,9 +251,10 @@ def build_grid(right_kind, fname, subtitle):
 
             ax.axvline(50.5, color="0.6", lw=0.8, ls=":")
             st = stats[(mois, vpd_l)]
-            ax.set_title(f"\u6c34\u5206 {mois.split()[0]} | VPD {vpd_l.split()[0]}\n"
+            lab = "abcdefghi"[r * 3 + c]
+            ax.set_title(f"({lab}) \u690d\u88ab-\u571f\u58e4\u6c34\u5206 {mois.split()[0]} | VPD {vpd_l.split()[0]}\n"
                          f"(\u03c3={st['std']:.1f}, \u5cf0\u8c37\u5dee={st['p2p']:.1f} dB)",
-                         fontsize=17)
+                         fontsize=15)
             ax.set_ylim(-80, -52)
             ax.set_xlim(-2, X0 + XW + 2)
             ax.set_xticks([0, 10, 20, 30, 40, 50])
