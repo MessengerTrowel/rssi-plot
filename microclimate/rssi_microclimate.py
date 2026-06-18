@@ -171,25 +171,129 @@ for r, mois in enumerate(row_order):
                 markeredgecolor="black", markersize=6, zorder=5)
         ax.axvline(50.5, color="0.6", lw=0.8, ls=":")
         st = stats[(mois, vpd_l)]
-        ax.set_title(f"\u690d\u88ab-\u571f\u58e4\u6c34\u5206 {mois.split()[0]} | VPD {vpd_l.split()[0]}"
-                     f"  (\u03c3={st['std']:.1f}, \u5cf0\u8c37\u5dee={st['p2p']:.1f} dB)",
-                     fontsize=13)
+        ax.set_title(f"\u6c34\u5206 {mois.split()[0]} | VPD {vpd_l.split()[0]}\n"
+                     f"(\u03c3={st['std']:.1f}, \u5cf0\u8c37\u5dee={st['p2p']:.1f} dB)",
+                     fontsize=17)
         ax.set_ylim(-80, -52)
         ax.set_xlim(-2, X0 + XW + 2)
         ax.set_xticks([0, 10, 20, 30, 40, 50])
         ax.grid(True, linestyle="--", alpha=0.35)
-        style(ax, fs=14)
+        style(ax, fs=17)
 for c in range(3):
-    axes[2, c].set_xlabel("\u65f6\u95f4 Time /s   (\u53f3\u4fa7: \u5206\u5e03 Distribution)", fontsize=16)
+    axes[2, c].set_xlabel("\u65f6\u95f4 Time /s   (\u53f3\u4fa7: \u5206\u5e03 Distribution)", fontsize=19)
 for r in range(3):
-    axes[r, 0].set_ylabel("RSSI /dBm", fontsize=18)
+    axes[r, 0].set_ylabel("RSSI /dBm", fontsize=20)
 fig.suptitle("\u4e0d\u540c\u5fae\u6c14\u5019\u72b6\u6001\u7ec4\u5408\u4e0b\u7684 RSSI \u77ed\u65f6\u5e8f\u5217  "
              "RSSI short-time series under microclimate states",
-             fontsize=18, y=0.995)
+             fontsize=21, y=0.995)
 fig.tight_layout(rect=(0, 0, 1, 0.98))
 fig.savefig("C:/Users/Administrator/fig_micro_grid.png", bbox_inches="tight")
 plt.close(fig)
 print("saved fig_micro_grid.png")
+
+# ----------------------------------------------------------------------------
+# FIGURE A2: 3x3 pure-VIOLIN grid (each cell = one violin of that state)
+# ----------------------------------------------------------------------------
+fig, axes = plt.subplots(3, 3, figsize=(14.5, 10), sharex=True, sharey=True)
+for r, mois in enumerate(row_order):
+    for c, vpd_l in enumerate(col_order):
+        ax = axes[r, c]
+        pop = populations[(mois, vpd_l)]
+        color = COL_VPD[vpd_l]
+        vp = ax.violinplot([pop], positions=[1], showextrema=False, widths=0.9)
+        for b in vp["bodies"]:
+            b.set_facecolor(color); b.set_edgecolor("black")
+            b.set_alpha(0.6); b.set_linewidth(1.1)
+        ax.boxplot([pop], positions=[1], widths=0.13, patch_artist=True,
+                   whis=(5, 95), showcaps=True,
+                   medianprops=dict(color="white", linewidth=2),
+                   boxprops=dict(facecolor="0.25", edgecolor="0.25"),
+                   whiskerprops=dict(color="0.25"), capprops=dict(color="0.25"),
+                   flierprops=dict(marker="", alpha=0))
+        ax.scatter([1], [np.mean(pop)], color="white", edgecolor="black",
+                   zorder=5, s=55)
+        st = stats[(mois, vpd_l)]
+        ax.set_title(f"\u6c34\u5206 {mois.split()[0]} | VPD {vpd_l.split()[0]}\n"
+                     f"(\u03c3={st['std']:.1f}, \u5cf0\u8c37\u5dee={st['p2p']:.1f} dB)",
+                     fontsize=17)
+        ax.set_ylim(-82, -50)
+        ax.set_xlim(0.4, 1.6)
+        ax.set_xticks([])
+        ax.grid(axis="y", linestyle="--", alpha=0.35)
+        style(ax, fs=17)
+for r in range(3):
+    axes[r, 0].set_ylabel("RSSI /dBm", fontsize=20)
+fig.suptitle("\u5404\u5fae\u6c14\u5019\u72b6\u6001\u7ec4\u5408\u7684 RSSI \u5206\u5e03\u5c0f\u63d0\u7434\u56fe  "
+             "RSSI distribution per microclimate state (violin)",
+             fontsize=21, y=0.995)
+fig.tight_layout(rect=(0, 0, 1, 0.98))
+fig.savefig("C:/Users/Administrator/fig_micro_violingrid.png", bbox_inches="tight")
+plt.close(fig)
+print("saved fig_micro_violingrid.png")
+
+# ----------------------------------------------------------------------------
+# FIGURE A3: grouped violins -- x = VPD level, dodged by moisture level
+# ----------------------------------------------------------------------------
+fig, ax = plt.subplots(figsize=(13, 7.2))
+off = {"低 Low": -0.27, "中 Mid": 0.0, "高 High": 0.27}
+grp_col = {"低 Low": "#C44E52", "中 Mid": "#2CA02C", "高 High": "#3B4CC0"}  # moisture dry->wet
+for ci, vpd_l in enumerate(col_order):           # x groups: VPD dry->humid
+    for mois in row_order:                        # moisture dry->wet within group
+        pop = populations[(mois, vpd_l)]
+        xpos = ci + 1 + off[mois]
+        vp = ax.violinplot([pop], positions=[xpos], showextrema=False, widths=0.24)
+        for b in vp["bodies"]:
+            b.set_facecolor(grp_col[mois]); b.set_edgecolor("black")
+            b.set_alpha(0.6); b.set_linewidth(1.0)
+        ax.scatter([xpos], [np.mean(pop)], color="white", edgecolor="black",
+                   zorder=5, s=42)
+ax.set_xticks([1, 2, 3])
+ax.set_xticklabels([v.split()[0] + f" {v.split()[1]}" for v in col_order], fontsize=19)
+ax.set_xlabel("\u5927\u6c14\u5e72\u6e7f\u72b6\u6001 VPD (\u5e72\u2192\u6e7f Dry\u2192Humid)", fontsize=21)
+ax.set_ylabel("RSSI /dBm", fontsize=21)
+from matplotlib.patches import Patch
+leg = [Patch(facecolor=grp_col[m], edgecolor="black", alpha=0.6,
+             label="\u690d\u88ab-\u571f\u58e4\u6c34\u5206 " + m) for m in row_order]
+ax.legend(handles=leg, fontsize=15, loc="upper left", framealpha=0.95, title_fontsize=15)
+ax.grid(axis="y", linestyle="--", alpha=0.35)
+style(ax, fs=19)
+fig.tight_layout()
+fig.savefig("C:/Users/Administrator/fig_micro_violin_grouped.png", bbox_inches="tight")
+plt.close(fig)
+print("saved fig_micro_violin_grouped.png")
+
+# ----------------------------------------------------------------------------
+# FIGURE A4: 9 violins ordered by dryness, with mean trend line
+# ----------------------------------------------------------------------------
+import matplotlib.cm as cm
+combos = [(m, v) for m in row_order for v in col_order]
+combos.sort(key=lambda mv: (vpd_dry[mv[1]] + mois_dry[mv[0]]) / 2.0)  # wet->dry
+fig, ax = plt.subplots(figsize=(15, 7.2))
+means = []
+for i, (mois, vpd_l) in enumerate(combos):
+    pop = populations[(mois, vpd_l)]
+    dn = (vpd_dry[vpd_l] + mois_dry[mois]) / 2.0
+    color = cm.coolwarm(dn)            # wet(cool blue) -> dry(warm red)
+    vp = ax.violinplot([pop], positions=[i + 1], showextrema=False, widths=0.85)
+    for b in vp["bodies"]:
+        b.set_facecolor(color); b.set_edgecolor("black")
+        b.set_alpha(0.7); b.set_linewidth(1.0)
+    m = np.mean(pop); means.append(m)
+    ax.scatter([i + 1], [m], color="white", edgecolor="black", zorder=6, s=46)
+ax.plot(range(1, len(combos) + 1), means, color="0.25", lw=1.6, ls="--",
+        zorder=4, label="\u5747\u503c\u8d8b\u52bf Mean trend")
+ax.set_xticks(range(1, len(combos) + 1))
+ax.set_xticklabels([f"\u6c34{m.split()[0]}\nVPD{v.split()[0]}" for m, v in combos],
+                   fontsize=15)
+ax.set_xlabel("\u5fae\u6c14\u5019\u72b6\u6001\u7ec4\u5408 (\u6e7f\u2192\u5e72 Wet\u2192Dry)", fontsize=21)
+ax.set_ylabel("RSSI /dBm", fontsize=21)
+ax.grid(axis="y", linestyle="--", alpha=0.35)
+style(ax, fs=18)
+ax.legend(fontsize=15, loc="upper left", framealpha=0.95)
+fig.tight_layout()
+fig.savefig("C:/Users/Administrator/fig_micro_violin_ordered.png", bbox_inches="tight")
+plt.close(fig)
+print("saved fig_micro_violin_ordered.png")
 
 # ----------------------------------------------------------------------------
 # FIGURE B: violin distributions by VPD level and by moisture level
