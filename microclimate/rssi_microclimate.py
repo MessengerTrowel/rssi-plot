@@ -193,7 +193,7 @@ for r, mois in enumerate(row_order):
                 markeredgecolor="black", markersize=6, zorder=5)
         ax.axvline(50.5, color="0.6", lw=0.8, ls=":")
         st = stats[(mois, vpd_l)]
-        ax.set_title(f"\u690d\u88ab-\u571f\u58e4\u6c34\u5206 {vs_lab(mois)} | VPD {vpd_lab(vpd_l)}\n"
+        ax.set_title(f"\u690d\u88ab-\u571f\u58e4\u6e7f\u5ea6 {vs_lab(mois)} | VPD {vpd_lab(vpd_l)}\n"
                      f"(\u03c3={st['std']:.1f}, \u5cf0\u8c37\u5dee={st['p2p']:.1f} dB)",
                      fontsize=12.5)
         ax.set_ylim(-80, -52)
@@ -274,17 +274,17 @@ def build_grid(right_kind, fname, subtitle):
             ax.axvline(50.5, color="0.6", lw=0.8, ls=":")
             st = stats[(mois, vpd_l)]
             lab = "abcdefghi"[r * 3 + c]
-            ax.set_title(f"({lab}) \u690d\u88ab-\u571f\u58e4\u6c34\u5206 {vs_lab(mois)} | VPD {vpd_lab(vpd_l)}\n"
+            ax.set_title(f"\u690d\u88ab-\u571f\u58e4\u6e7f\u5ea6 {vs_lab(mois)} | VPD {vpd_lab(vpd_l)}\n"
                          f"(\u03c3={st['std']:.1f}, \u5cf0\u8c37\u5dee={st['p2p']:.1f} dB)",
                          fontsize=12.5)
+            ax.set_title(f"({lab})", loc="left", fontsize=17, fontweight="bold")
             ax.set_ylim(-80, -52)
             ax.set_xlim(-2, X0 + XW + 2)
             ax.set_xticks([0, 10, 20, 30, 40, 50])
             ax.grid(True, linestyle="--", alpha=0.35)
             style(ax, fs=17)
     for c in range(3):
-        axes[2, c].set_xlabel("\u65f6\u95f4 Time /s   (\u53f3\u4fa7: \u5206\u5e03 Distribution)",
-                              fontsize=19)
+        axes[2, c].set_xlabel("\u65f6\u95f4 Time /s", fontsize=20)
     for r in range(3):
         axes[r, 0].set_ylabel("RSSI /dBm", fontsize=20)
     fig.suptitle("\u4e0d\u540c\u5fae\u6c14\u5019\u72b6\u6001\u7ec4\u5408\u4e0b\u7684 RSSI \u77ed\u65f6\u5e8f\u5217  "
@@ -324,7 +324,7 @@ for r, mois in enumerate(row_order):
         ax.scatter([1], [np.mean(pop)], color="white", edgecolor="black",
                    zorder=5, s=55)
         st = stats[(mois, vpd_l)]
-        ax.set_title(f"\u690d\u88ab-\u571f\u58e4\u6c34\u5206 {vs_lab(mois)} | VPD {vpd_lab(vpd_l)}\n"
+        ax.set_title(f"\u690d\u88ab-\u571f\u58e4\u6e7f\u5ea6 {vs_lab(mois)} | VPD {vpd_lab(vpd_l)}\n"
                      f"(\u03c3={st['std']:.1f}, \u5cf0\u8c37\u5dee={st['p2p']:.1f} dB)",
                      fontsize=12.5)
         ax.set_ylim(-82, -50)
@@ -364,7 +364,7 @@ ax.set_xlabel("\u5927\u6c14\u5e72\u6e7f\u72b6\u6001 VPD (\u5e72\u2192\u6e7f Dry\
 ax.set_ylabel("RSSI /dBm", fontsize=21)
 from matplotlib.patches import Patch
 leg = [Patch(facecolor=grp_col[m], edgecolor="black", alpha=0.6,
-             label="\u690d\u88ab-\u571f\u58e4\u6c34\u5206 " + vs_lab(m)) for m in row_order]
+             label="\u690d\u88ab-\u571f\u58e4\u6e7f\u5ea6 " + vs_lab(m)) for m in row_order]
 ax.legend(handles=leg, fontsize=15, loc="upper left", framealpha=0.95, title_fontsize=15)
 ax.grid(axis="y", linestyle="--", alpha=0.35)
 style(ax, fs=19)
@@ -394,7 +394,7 @@ for i, (mois, vpd_l) in enumerate(combos):
 ax.plot(range(1, len(combos) + 1), means, color="0.25", lw=1.6, ls="--",
         zorder=4, label="\u5747\u503c\u8d8b\u52bf Mean trend")
 ax.set_xticks(range(1, len(combos) + 1))
-ax.set_xticklabels([f"\u6c34\u5206{vs_lab(m)}\nVPD{vpd_lab(v)}" for m, v in combos],
+ax.set_xticklabels([f"\u6e7f\u5ea6{vs_lab(m)}\nVPD{vpd_lab(v)}" for m, v in combos],
                    fontsize=10)
 ax.set_xlabel("\u5fae\u6c14\u5019\u72b6\u6001\u7ec4\u5408 (\u6e7f\u2192\u5e72 Wet\u2192Dry)", fontsize=21)
 ax.set_ylabel("RSSI /dBm", fontsize=21)
@@ -416,8 +416,8 @@ pos = [1, 2, 3]
 for ax, by, title, cmap, xlab in [
     (axL, "vpd", "\u6309\u5927\u6c14\u5e72\u6e7f\u72b6\u6001 By atmospheric dryness (VPD)",
      COL_VPD, "VPD \u7b49\u7ea7  VPD level"),
-    (axR, "mois", "\u6309\u690d\u88ab-\u571f\u58e4\u6c34\u5206 By veg-soil moisture",
-     COL_MOIS, "\u6c34\u5206\u7b49\u7ea7  Moisture level")]:
+    (axR, "mois", "\u6309\u690d\u88ab-\u571f\u58e4\u6e7f\u5ea6 By veg-soil moisture",
+     COL_MOIS, "\u6e7f\u5ea6\u7b49\u7ea7  Moisture level")]:
     data = []
     for lv in LV:
         if by == "vpd":
@@ -471,7 +471,7 @@ for ax, (key, title, cmap) in zip(axes, metrics):
     ax.set_yticks(range(3)); ax.set_yticklabels([vs_lab(m) for m in row_order], fontsize=11,
                                                  rotation=90, va="center")
     ax.set_xlabel("VPD (\u5e72\u2192\u6e7f Dry\u2192Humid)", fontsize=17)
-    ax.set_ylabel("\u690d\u88ab-\u571f\u58e4\u6c34\u5206 (\u5e72\u2192\u6e7f)", fontsize=17)
+    ax.set_ylabel("\u690d\u88ab-\u571f\u58e4\u6e7f\u5ea6 (\u5e72\u2192\u6e7f)", fontsize=17)
     ax.set_title(title, fontsize=17)
     cb = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
     cb.ax.tick_params(labelsize=13)
@@ -505,11 +505,11 @@ m1, = ax2.plot(h, soil, color="#2CA02C", lw=2.2, label="\u571f\u58e4\u542b\u6c34
 m2, = ax2.plot(h, trunk, color="#17BECF", lw=2.2, ls="--", label="\u6811\u5e72\u6e7f\u5ea6 Trunk RH /%")
 ax2.set_ylabel("\u571f\u58e4\u542b\u6c34\u7387 /%   \u6811\u5e72\u6e7f\u5ea6 /%", fontsize=18)
 ax2b = ax2.twinx()
-m3, = ax2b.plot(h, vs, color="#9467BD", lw=2.4, label="\u690d\u88ab-\u571f\u58e4\u6c34\u5206\u7efc\u5408 (\u6807\u51c6\u5316)")
+m3, = ax2b.plot(h, vs, color="#9467BD", lw=2.4, label="\u690d\u88ab-\u571f\u58e4\u6e7f\u5ea6\u7efc\u5408 (\u6807\u51c6\u5316)")
 ax2b.set_ylabel("\u7efc\u5408\u72b6\u6001 (z)", fontsize=18, color="#9467BD")
 ax2b.tick_params(axis="y", colors="#9467BD")
 ax2.set_xlabel("\u65f6\u95f4 Time of day /h", fontsize=20)
-ax2.set_title("\u690d\u88ab-\u571f\u58e4\u6c34\u5206\u7efc\u5408\u72b6\u6001 Vegetation-soil moisture state", fontsize=18)
+ax2.set_title("\u690d\u88ab-\u571f\u58e4\u6e7f\u5ea6\u7efc\u5408\u72b6\u6001 Vegetation-soil moisture state", fontsize=18)
 ax2.set_xlim(0, 24); ax2.set_xticks(range(0, 25, 2))
 ax2.grid(True, linestyle="--", alpha=0.35)
 style(ax2, fs=18); style(ax2b, fs=18)
