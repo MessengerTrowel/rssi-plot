@@ -27,6 +27,7 @@ Outputs (project style: SimSun + Times New Roman, full frame, inward ticks):
 """
 import csv
 import numpy as np
+from scipy.stats import gaussian_kde
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -146,23 +147,40 @@ with open("C:/Users/Administrator/micro_state_stats.csv", "w", newline="", encod
 row_order = ["低 Low", "中 Mid", "高 High"]          # moisture: dry -> wet
 col_order = ["高 High", "中 Mid", "低 Low"]          # VPD: dry -> humid
 t = np.arange(N)
-fig, axes = plt.subplots(3, 3, figsize=(14, 10), sharex=True, sharey=True)
+X0, XW = 53.0, 13.0          # half-violin anchor x and width on the right margin
+fig, axes = plt.subplots(3, 3, figsize=(14.5, 10), sharex=True, sharey=True)
 for r, mois in enumerate(row_order):
     for c, vpd_l in enumerate(col_order):
         ax = axes[r, c]
         y = series_grid[(mois, vpd_l)]
+        pop = populations[(mois, vpd_l)]
         color = COL_VPD[vpd_l]
+        # time-series (left)
         ax.plot(t, y, color=color, lw=1.6, marker="o", markersize=3,
                 markevery=3, alpha=0.95)
+        # marginal half-violin (right) -- distribution of RSSI for this state
+        yy = np.linspace(-80, -52, 200)
+        dens = gaussian_kde(pop)(yy)
+        dens = dens / dens.max() * XW
+        ax.fill_betweenx(yy, X0, X0 + dens, facecolor=color, alpha=0.55,
+                         edgecolor="black", lw=0.8, zorder=3)
+        med = np.median(pop); mean = np.mean(pop)
+        ax.hlines(med, X0, X0 + np.interp(med, yy, dens), color="white",
+                  lw=2.0, zorder=4)
+        ax.plot(X0 + np.interp(mean, yy, dens) * 0.5, mean, "o", color="white",
+                markeredgecolor="black", markersize=6, zorder=5)
+        ax.axvline(50.5, color="0.6", lw=0.8, ls=":")
         st = stats[(mois, vpd_l)]
         ax.set_title(f"\u690d\u88ab-\u571f\u58e4\u6c34\u5206 {mois.split()[0]} | VPD {vpd_l.split()[0]}"
                      f"  (\u03c3={st['std']:.1f}, \u5cf0\u8c37\u5dee={st['p2p']:.1f} dB)",
                      fontsize=13)
         ax.set_ylim(-80, -52)
+        ax.set_xlim(-2, X0 + XW + 2)
+        ax.set_xticks([0, 10, 20, 30, 40, 50])
         ax.grid(True, linestyle="--", alpha=0.35)
         style(ax, fs=14)
 for c in range(3):
-    axes[2, c].set_xlabel("\u65f6\u95f4 Time /s", fontsize=18)
+    axes[2, c].set_xlabel("\u65f6\u95f4 Time /s   (\u53f3\u4fa7: \u5206\u5e03 Distribution)", fontsize=16)
 for r in range(3):
     axes[r, 0].set_ylabel("RSSI /dBm", fontsize=18)
 fig.suptitle("\u4e0d\u540c\u5fae\u6c14\u5019\u72b6\u6001\u7ec4\u5408\u4e0b\u7684 RSSI \u77ed\u65f6\u5e8f\u5217  "
