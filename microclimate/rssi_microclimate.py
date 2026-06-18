@@ -196,7 +196,7 @@ for r, mois in enumerate(row_order):
         st = stats[(mois, vpd_l)]
         ax.set_title(f"\u690d\u88ab-\u571f\u58e4\u6e7f\u5ea6 {vs_lab(mois)} | VPD {vpd_lab(vpd_l)}\n"
                      f"(\u03c3={st['std']:.1f}, \u5cf0\u8c37\u5dee={st['p2p']:.1f} dB)",
-                     fontsize=15)
+                     fontsize=17)
         ax.set_ylim(-80, -52)
         ax.set_xlim(-2, X0 + XW + 2)
         ax.set_xticks([0, 10, 20, 30, 40, 50])
@@ -277,8 +277,8 @@ def build_grid(right_kind, fname, subtitle):
             lab = "abcdefghi"[r * 3 + c]
             ax.set_title(f"\u690d\u88ab-\u571f\u58e4\u6e7f\u5ea6 {vs_lab(mois)} | VPD {vpd_lab(vpd_l)}\n"
                          f"(\u03c3={st['std']:.1f}, \u5cf0\u8c37\u5dee={st['p2p']:.1f} dB)",
-                         fontsize=15)
-            ax.set_title(f"({lab})", loc="left", fontsize=17, fontweight="bold")
+                         fontsize=17)
+            ax.set_title(f"({lab})", loc="left", fontsize=20)
             ax.set_ylim(-80, -52)
             ax.set_xlim(-2, X0 + XW + 2)
             ax.set_xticks([0, 10, 20, 30, 40, 50])
@@ -327,7 +327,7 @@ for r, mois in enumerate(row_order):
         st = stats[(mois, vpd_l)]
         ax.set_title(f"\u690d\u88ab-\u571f\u58e4\u6e7f\u5ea6 {vs_lab(mois)} | VPD {vpd_lab(vpd_l)}\n"
                      f"(\u03c3={st['std']:.1f}, \u5cf0\u8c37\u5dee={st['p2p']:.1f} dB)",
-                     fontsize=15)
+                     fontsize=17)
         ax.set_ylim(-82, -50)
         ax.set_xlim(0.4, 1.6)
         ax.set_xticks([])
