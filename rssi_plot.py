@@ -55,9 +55,9 @@ RSSI0 = -30.0          # reference RSSI at 1 m (dBm)
 # d_amp is the peak-to-peak smooth diurnal swing (dB) at the far node.
 # Forest medium => strong day-night cycle: lower at night, higher in daytime.
 dates = {
-    "2024-09-01": dict(n=3.05, d_amp=17.0, dew=0.5, shad=1.3, fast=2.2, off=-1.5, seed=901),
-    "2024-10-05": dict(n=2.85, d_amp=14.0, dew=0.4, shad=1.1, fast=1.8, off=+1.0, seed=1005),
-    "2025-06-15": dict(n=3.00, d_amp=19.0, dew=0.45, shad=1.4, fast=2.4, off=-0.8, seed=615),
+    "2024-09-01": dict(n=3.05, d_amp=17.0, dew=0.5, shad=2.2, fast=3.8, off=-1.5, seed=901),
+    "2024-10-05": dict(n=2.85, d_amp=14.0, dew=0.4, shad=1.9, fast=3.2, off=+1.0, seed=1005),
+    "2025-06-15": dict(n=3.00, d_amp=19.0, dew=0.45, shad=2.4, fast=4.0, off=-0.8, seed=615),
 }
 
 # ---------------------------------------------------------------- time axis
