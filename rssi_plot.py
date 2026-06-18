@@ -110,7 +110,7 @@ def plot_date(date, p, save):
         series_all[name] = y
         ax.plot(t_h, y, color=color, marker=marker, markersize=4,
                 markevery=2, linewidth=1.2, alpha=0.9,
-                label=f"{name}  ({dist:g} m)")
+                label=name)
     ax.set_xlim(0, 24)
     ax.xaxis.set_major_locator(MultipleLocator(2))
     ax.set_xlabel("时间 Time of day /h")
@@ -142,7 +142,7 @@ for di, date in enumerate(date_list):
     data = all_data[date]
     x = seg_starts[di] + t_h
     for (name, dist), (color, marker) in zip(nodes, styles):
-        lbl = f"{name} ({dist:g} m)" if di == 0 else None
+        lbl = name if di == 0 else None
         ax.plot(x, data[name], color=color, marker=marker, markersize=5,
                 markevery=2, linewidth=1.4, alpha=0.9, label=lbl)
 
