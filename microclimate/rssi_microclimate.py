@@ -76,6 +76,28 @@ trunk = np.clip(trunk, 88, 100)
 z = lambda x: (x - x.mean()) / x.std()
 vs = (z(soil) + z(trunk)) / 2.0
 
+# tertile boundaries -> numeric range strings for each level (replaces Low/Mid/High)
+VPD_Q = np.quantile(vpd, [1 / 3, 2 / 3])
+VS_Q = np.quantile(vs, [1 / 3, 2 / 3])
+
+
+def rng_str(level, q, lo, hi, unit=""):
+    if level.startswith("\u4f4e"):        # 低
+        a, b = lo, q[0]
+    elif level.startswith("\u4e2d"):      # 中
+        a, b = q[0], q[1]
+    else:                                 # 高
+        a, b = q[1], hi
+    return f"[{a:.2f}, {b:.2f}]{unit}"
+
+
+def vpd_lab(level):
+    return rng_str(level, VPD_Q, vpd.min(), vpd.max(), " kPa")
+
+
+def vs_lab(level):
+    return rng_str(level, VS_Q, vs.min(), vs.max())
+
 # save full-day climate
 with open("C:/Users/Administrator/climate_day.csv", "w", newline="", encoding="utf-8-sig") as fcsv:
     w = csv.writer(fcsv)
@@ -171,9 +193,9 @@ for r, mois in enumerate(row_order):
                 markeredgecolor="black", markersize=6, zorder=5)
         ax.axvline(50.5, color="0.6", lw=0.8, ls=":")
         st = stats[(mois, vpd_l)]
-        ax.set_title(f"\u6c34\u5206 {mois.split()[0]} | VPD {vpd_l.split()[0]}\n"
+        ax.set_title(f"\u690d\u88ab-\u571f\u58e4\u6c34\u5206 {vs_lab(mois)} | VPD {vpd_lab(vpd_l)}\n"
                      f"(\u03c3={st['std']:.1f}, \u5cf0\u8c37\u5dee={st['p2p']:.1f} dB)",
-                     fontsize=17)
+                     fontsize=12.5)
         ax.set_ylim(-80, -52)
         ax.set_xlim(-2, X0 + XW + 2)
         ax.set_xticks([0, 10, 20, 30, 40, 50])
@@ -252,9 +274,9 @@ def build_grid(right_kind, fname, subtitle):
             ax.axvline(50.5, color="0.6", lw=0.8, ls=":")
             st = stats[(mois, vpd_l)]
             lab = "abcdefghi"[r * 3 + c]
-            ax.set_title(f"({lab}) \u690d\u88ab-\u571f\u58e4\u6c34\u5206 {mois.split()[0]} | VPD {vpd_l.split()[0]}\n"
+            ax.set_title(f"({lab}) \u690d\u88ab-\u571f\u58e4\u6c34\u5206 {vs_lab(mois)} | VPD {vpd_lab(vpd_l)}\n"
                          f"(\u03c3={st['std']:.1f}, \u5cf0\u8c37\u5dee={st['p2p']:.1f} dB)",
-                         fontsize=15)
+                         fontsize=12.5)
             ax.set_ylim(-80, -52)
             ax.set_xlim(-2, X0 + XW + 2)
             ax.set_xticks([0, 10, 20, 30, 40, 50])
@@ -302,9 +324,9 @@ for r, mois in enumerate(row_order):
         ax.scatter([1], [np.mean(pop)], color="white", edgecolor="black",
                    zorder=5, s=55)
         st = stats[(mois, vpd_l)]
-        ax.set_title(f"\u6c34\u5206 {mois.split()[0]} | VPD {vpd_l.split()[0]}\n"
+        ax.set_title(f"\u690d\u88ab-\u571f\u58e4\u6c34\u5206 {vs_lab(mois)} | VPD {vpd_lab(vpd_l)}\n"
                      f"(\u03c3={st['std']:.1f}, \u5cf0\u8c37\u5dee={st['p2p']:.1f} dB)",
-                     fontsize=17)
+                     fontsize=12.5)
         ax.set_ylim(-82, -50)
         ax.set_xlim(0.4, 1.6)
         ax.set_xticks([])
@@ -337,12 +359,12 @@ for ci, vpd_l in enumerate(col_order):           # x groups: VPD dry->humid
         ax.scatter([xpos], [np.mean(pop)], color="white", edgecolor="black",
                    zorder=5, s=42)
 ax.set_xticks([1, 2, 3])
-ax.set_xticklabels([v.split()[0] + f" {v.split()[1]}" for v in col_order], fontsize=19)
+ax.set_xticklabels([vpd_lab(v) for v in col_order], fontsize=16)
 ax.set_xlabel("\u5927\u6c14\u5e72\u6e7f\u72b6\u6001 VPD (\u5e72\u2192\u6e7f Dry\u2192Humid)", fontsize=21)
 ax.set_ylabel("RSSI /dBm", fontsize=21)
 from matplotlib.patches import Patch
 leg = [Patch(facecolor=grp_col[m], edgecolor="black", alpha=0.6,
-             label="\u690d\u88ab-\u571f\u58e4\u6c34\u5206 " + m) for m in row_order]
+             label="\u690d\u88ab-\u571f\u58e4\u6c34\u5206 " + vs_lab(m)) for m in row_order]
 ax.legend(handles=leg, fontsize=15, loc="upper left", framealpha=0.95, title_fontsize=15)
 ax.grid(axis="y", linestyle="--", alpha=0.35)
 style(ax, fs=19)
@@ -372,8 +394,8 @@ for i, (mois, vpd_l) in enumerate(combos):
 ax.plot(range(1, len(combos) + 1), means, color="0.25", lw=1.6, ls="--",
         zorder=4, label="\u5747\u503c\u8d8b\u52bf Mean trend")
 ax.set_xticks(range(1, len(combos) + 1))
-ax.set_xticklabels([f"\u6c34{m.split()[0]}\nVPD{v.split()[0]}" for m, v in combos],
-                   fontsize=15)
+ax.set_xticklabels([f"\u6c34\u5206{vs_lab(m)}\nVPD{vpd_lab(v)}" for m, v in combos],
+                   fontsize=10)
 ax.set_xlabel("\u5fae\u6c14\u5019\u72b6\u6001\u7ec4\u5408 (\u6e7f\u2192\u5e72 Wet\u2192Dry)", fontsize=21)
 ax.set_ylabel("RSSI /dBm", fontsize=21)
 ax.grid(axis="y", linestyle="--", alpha=0.35)
@@ -415,7 +437,11 @@ for ax, by, title, cmap, xlab in [
                     flierprops=dict(marker="", alpha=0))
     ax.scatter(pos, [np.mean(d) for d in data], color="white",
                edgecolor="black", zorder=5, s=45, label="\u5747\u503c Mean")
-    ax.set_xticks(pos); ax.set_xticklabels(LV, fontsize=18)
+    ax.set_xticks(pos)
+    if by == "vpd":
+        ax.set_xticklabels([vpd_lab(lv) for lv in LV], fontsize=14)
+    else:
+        ax.set_xticklabels([vs_lab(lv) for lv in LV], fontsize=14)
     ax.set_xlabel(xlab, fontsize=20)
     ax.set_ylabel("RSSI /dBm", fontsize=20)
     ax.set_title(title, fontsize=17)
@@ -441,8 +467,9 @@ for ax, (key, title, cmap) in zip(axes, metrics):
         for j in range(3):
             ax.text(j, i, f"{M[i, j]:.1f}", ha="center", va="center",
                     color="white", fontsize=17, fontweight="bold")
-    ax.set_xticks(range(3)); ax.set_xticklabels([v.split()[0] for v in col_order], fontsize=16)
-    ax.set_yticks(range(3)); ax.set_yticklabels([m.split()[0] for m in row_order], fontsize=16)
+    ax.set_xticks(range(3)); ax.set_xticklabels([vpd_lab(v) for v in col_order], fontsize=11)
+    ax.set_yticks(range(3)); ax.set_yticklabels([vs_lab(m) for m in row_order], fontsize=11,
+                                                 rotation=90, va="center")
     ax.set_xlabel("VPD (\u5e72\u2192\u6e7f Dry\u2192Humid)", fontsize=17)
     ax.set_ylabel("\u690d\u88ab-\u571f\u58e4\u6c34\u5206 (\u5e72\u2192\u6e7f)", fontsize=17)
     ax.set_title(title, fontsize=17)
