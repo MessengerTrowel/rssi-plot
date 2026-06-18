@@ -79,9 +79,11 @@ YL = "\u63a5\u6536\u4fe1\u53f7\u5f3a\u5ea6 RSSI /dBm"
 
 
 def clean(ax):
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.tick_params(labelsize=17)
+    # unified Fig.3 style: full frame, inward ticks on all four sides
+    for s in ax.spines.values():
+        s.set_visible(True); s.set_linewidth(1.2)
+    ax.tick_params(axis="both", direction="in", length=6, width=1.1,
+                   top=True, right=True, labelsize=22)
 
 
 # =============================================================== 1) VIOLIN
@@ -100,11 +102,11 @@ bp = ax.boxplot(samples, positions=pos, widths=0.12, patch_artist=True,
 means = [np.mean(s) for s in samples]
 ax.scatter(pos, means, marker="o", color="white", edgecolor="black",
            zorder=5, s=42, label="\u5747\u503c Mean")
-ax.set_xticks(pos); ax.set_xticklabels(labels, fontsize=16)
-ax.set_xlabel(XL, fontsize=21); ax.set_ylabel(YL, fontsize=21)
+ax.set_xticks(pos); ax.set_xticklabels(labels, fontsize=20)
+ax.set_xlabel(XL, fontsize=25); ax.set_ylabel(YL, fontsize=25)
 ax.grid(axis="y", linestyle="--", alpha=0.35)
-ax.legend(fontsize=14, loc="upper right", frameon=False)
 clean(ax)
+ax.legend(fontsize=18, loc="upper right", framealpha=0.95)
 fig.tight_layout()
 fig.savefig("C:/Users/Administrator/fig_b_violin.png", bbox_inches="tight")
 plt.close(fig)
@@ -131,9 +133,10 @@ for i, (s, c) in enumerate(zip(samples, palette)):
                alpha=0.25, edgecolor="none", zorder=2)
 ax.set_yticks([len(nodes) - i for i in range(len(nodes))])
 ax.set_yticklabels([f"{n} ({d:g} m)" for n, d in nodes], fontsize=16)
-ax.set_xlabel(YL, fontsize=21); ax.set_ylabel(XL, fontsize=21)
+ax.set_xlabel(YL, fontsize=25); ax.set_ylabel(XL, fontsize=25)
 ax.grid(axis="x", linestyle="--", alpha=0.35)
 clean(ax)
+ax.set_yticklabels([f"{n} ({d:g} m)" for n, d in nodes], fontsize=20)
 fig.tight_layout()
 fig.savefig("C:/Users/Administrator/fig_b_raincloud.png", bbox_inches="tight")
 plt.close(fig)
@@ -152,14 +155,15 @@ for i, (s, c) in enumerate(zip(samples, palette)):
                     lw=1.2, edgecolor="black", zorder=len(nodes) - i)
     ax.plot(xs, base + dens, color="black", lw=0.8, zorder=len(nodes) - i)
     ax.text(xs[0], base + 0.12, f"{nodes[i][0]} ({nodes[i][1]:g} m)",
-            fontsize=15, va="bottom", ha="left")
+            fontsize=18, va="bottom", ha="left")
 ax.set_yticks([])
-ax.set_xlabel(YL, fontsize=21)
-ax.set_ylabel("\u6982\u7387\u5bc6\u5ea6 Probability density (\u504f\u79fb Offset)", fontsize=18)
-ax.spines["top"].set_visible(False)
-ax.spines["right"].set_visible(False)
-ax.spines["left"].set_visible(False)
-ax.tick_params(labelsize=17)
+ax.set_xlabel(YL, fontsize=25)
+ax.set_ylabel("\u6982\u7387\u5bc6\u5ea6 Probability density (\u504f\u79fb Offset)", fontsize=21)
+for s in ax.spines.values():
+    s.set_visible(True); s.set_linewidth(1.2)
+ax.tick_params(axis="x", direction="in", length=6, width=1.1, top=True,
+               labelsize=22)
+ax.tick_params(axis="y", left=False, right=False)
 ax.grid(axis="x", linestyle="--", alpha=0.3)
 fig.tight_layout()
 fig.savefig("C:/Users/Administrator/fig_b_ridgeline.png", bbox_inches="tight")
@@ -193,10 +197,11 @@ for d, m, c in zip(logd, means, palette):
 ax.set_xlim(np.log10(0.8), np.log10(185))
 ax.set_xticks(logd)
 ax.set_xticklabels([f"{d:g}" for d in dists], fontsize=17)
-ax.set_xlabel(XLD, fontsize=21); ax.set_ylabel(YL, fontsize=21)
+ax.set_xlabel(XLD, fontsize=25); ax.set_ylabel(YL, fontsize=25)
 ax.grid(axis="y", linestyle="--", alpha=0.35)
-ax.legend(fontsize=13, loc="upper right", frameon=False)
 clean(ax)
+ax.set_xticklabels([f"{d:g}" for d in dists], fontsize=22)
+ax.legend(fontsize=16, loc="upper right", framealpha=0.95)
 fig.tight_layout()
 fig.savefig("C:/Users/Administrator/fig_b_violin_fit.png", bbox_inches="tight")
 plt.close(fig)
