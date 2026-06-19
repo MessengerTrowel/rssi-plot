@@ -294,16 +294,16 @@ def draw_table(colheads, rows, group_rows, fname, title, col_w):
     print("saved", fname)
 
 
-# build row tuples for table (a): E_rms
-heads_a = ["\u690d\u88ab-\u571f\u58e4\u6e7f\u5ea6", "VPD /kPa",
+# build row tuples for table (a): E_rms  (state shown by Low/Mid/High levels)
+heads_a = ["\u690d\u88ab-\u571f\u58e4\u6e7f\u5ea6", "\u5927\u6c14\u5e72\u6e7f VPD",
            "Gaussian $E_{rms}$", "Rician $E_{rms}$",
            "Rayleigh $E_{rms}$", "Nakagami $E_{rms}$"]
 rows_a = []
 for mois in row_order:
     for ci, vpd_l in enumerate(col_order):
         fs = results[(mois, vpd_l)]
-        grp = vs_lab(mois) if ci == 0 else None
-        rows_a.append((grp, vpd_lab(vpd_l),
+        grp = mois if ci == 0 else None
+        rows_a.append((grp, vpd_l,
                        [f"{fs['Gaussian']['Erms']:.4f}",
                         f"{fs['Rician']['Erms']:.4f}",
                         f"{fs['Rayleigh']['Erms']:.4f}",
@@ -311,53 +311,21 @@ for mois in row_order:
 draw_table(heads_a, rows_a, 3, "table_fading_Erms.png",
            "\u8868 (a)  \u56db\u79cd\u5206\u5e03\u5bf9\u5404\u5fae\u6c14\u5019\u72b6\u6001 RSSI "
            "\u5305\u7edc PDF \u7684\u62df\u5408\u8bef\u5dee E_rms",
-           col_w=[2.0, 1.4, 2.0, 1.8, 2.0, 2.1])
-
-# build row tuples for table (b): parameters / indicators
-heads_b = ["\u690d\u88ab-\u571f\u58e4\u6e7f\u5ea6", "VPD /kPa",
-           "Rician $K$ /dB", "Nakagami $m$", "$F_{90}$ /dB", "\u6ce2\u52a8\u6bd4 R_f"]
-rows_b = []
-for mois in row_order:
-    for ci, vpd_l in enumerate(col_order):
-        fs = results[(mois, vpd_l)]
-        grp = vs_lab(mois) if ci == 0 else None
-        F = f90[(mois, vpd_l)]
-        rows_b.append((grp, vpd_lab(vpd_l),
-                       [f"{fs['Rician']['params']['K_dB']:.2f}",
-                        f"{fs['Nakagami']['params']['m']:.2f}",
-                        f"{F:.2f}",
-                        f"{F / f90_mean:.2f}"]))
-draw_table(heads_b, rows_b, 3, "table_fading_param.png",
-           "\u8868 (b)  \u5404\u5fae\u6c14\u5019\u72b6\u6001\u4e0b\u7684\u62df\u5408\u53c2\u6570"
-           "\u4e0e\u94fe\u8def\u7a33\u5b9a\u6027\u6307\u6807",
-           col_w=[2.0, 1.4, 1.9, 1.9, 1.7, 1.7])
+           col_w=[2.0, 1.8, 2.0, 1.8, 2.0, 2.1])
 
 # ----------------------------------------------------------------------------
 # 6) CSV + LaTeX exports
 # ----------------------------------------------------------------------------
 with open(OUT + "table_fading_Erms.csv", "w", newline="", encoding="utf-8-sig") as fc:
     w = csv.writer(fc)
-    w.writerow(["veg_soil_humidity", "VPD_kPa", "Gaussian_Erms", "Rician_Erms",
+    w.writerow(["veg_soil_humidity", "VPD_level", "Gaussian_Erms", "Rician_Erms",
                 "Rayleigh_Erms", "Nakagami_Erms"])
     for mois in row_order:
         for vpd_l in col_order:
             fs = results[(mois, vpd_l)]
-            w.writerow([vs_lab(mois), vpd_lab(vpd_l),
+            w.writerow([mois, vpd_l,
                         f"{fs['Gaussian']['Erms']:.4f}", f"{fs['Rician']['Erms']:.4f}",
                         f"{fs['Rayleigh']['Erms']:.4f}", f"{fs['Nakagami']['Erms']:.4f}"])
-
-with open(OUT + "table_fading_param.csv", "w", newline="", encoding="utf-8-sig") as fc:
-    w = csv.writer(fc)
-    w.writerow(["veg_soil_humidity", "VPD_kPa", "Rician_K_dB", "Nakagami_m",
-                "F90_dB", "R_f"])
-    for mois in row_order:
-        for vpd_l in col_order:
-            fs = results[(mois, vpd_l)]
-            F = f90[(mois, vpd_l)]
-            w.writerow([vs_lab(mois), vpd_lab(vpd_l),
-                        f"{fs['Rician']['params']['K_dB']:.2f}",
-                        f"{fs['Nakagami']['params']['m']:.2f}",
-                        f"{F:.2f}", f"{F / f90_mean:.2f}"])
 
 
 def latex_table(heads, rows, caption, label):
@@ -376,16 +344,10 @@ def latex_table(heads, rows, caption, label):
     return "\n".join(lines)
 
 
-heads_a_tex = [r"植被-土壤湿度", r"VPD /kPa", r"Gaussian $E_{rms}$",
+heads_a_tex = [r"植被-土壤湿度", r"大气干湿 VPD", r"Gaussian $E_{rms}$",
                r"Rician $E_{rms}$", r"Rayleigh $E_{rms}$", r"Nakagami $E_{rms}$"]
-heads_b_tex = [r"植被-土壤湿度", r"VPD /kPa", r"Rician $K$ /dB",
-               r"Nakagami $m$", r"$F_{90}$ /dB", r"波动比 $R_f$"]
 with open(OUT + "table_fading_Erms.tex", "w", encoding="utf-8") as ft:
     ft.write(latex_table(heads_a_tex, rows_a,
                          "四种分布对各微气候状态 RSSI 包络 PDF 的拟合误差 $E_{rms}$",
                          "tab:fading_erms"))
-with open(OUT + "table_fading_param.tex", "w", encoding="utf-8") as ft:
-    ft.write(latex_table(heads_b_tex, rows_b,
-                         "各微气候状态下的拟合参数与链路稳定性指标",
-                         "tab:fading_param"))
 print("saved CSV + LaTeX tables")
