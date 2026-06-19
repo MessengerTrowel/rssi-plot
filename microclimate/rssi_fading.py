@@ -190,10 +190,12 @@ def fit_all(r, nbins=40):
 
 
 # ----------------------------------------------------------------------------
-# 3) FIGURE: high-humidity state envelope PDF + four fitted distributions
+# 3) FIGURE: representative (moderate-fading) state envelope PDF + four fits
+#    RSSI is a power metric, so the x-axis is the normalized ENVELOPE
+#    r = sqrt(P / mean(P))  (Eq. 2.3), not "voltage".
 # ----------------------------------------------------------------------------
-hi_state = ("高 High", "低 Low")           # wettest veg-soil + most humid air (lowest VPD)
-r_hi = envelope(rssi_state[hi_state])
+demo_state = ("中 Mid", "中 Mid")          # representative moderate-fading link
+r_hi = envelope(rssi_state[demo_state])
 fits, centers, counts, edges = fit_all(r_hi, nbins=42)
 
 xgrid = np.linspace(r_hi.min(), r_hi.max(), 400)
@@ -212,11 +214,11 @@ ax.plot(xgrid, fits["Rayleigh"]["pdf"](xgrid), color=C_RAYL, lw=2.4, ls="-",
         label="Rayleigh \u5206\u5e03", zorder=4)
 ax.set_xlabel("\u5f52\u4e00\u5316\u5305\u7edc Normalized envelope", fontsize=22)
 ax.set_ylabel("\u6982\u7387\u5bc6\u5ea6 Probability density", fontsize=22)
-ax.set_xlim(r_hi.min(), r_hi.max())
+ax.set_xlim(0, r_hi.max())
 ax.set_ylim(0, None)
 ax.legend(fontsize=15, framealpha=0.95, loc="upper right")
-ax.set_title("\u9ad8\u6e7f\u6761\u4ef6\u4e0b RSSI \u77ed\u65f6\u8870\u843d\u5206\u5e03\u62df\u5408  "
-             "RSSI short-term fading distribution fitting (high humidity)",
+ax.set_title("\u4ee3\u8868\u6027\u94fe\u8def RSSI \u77ed\u65f6\u8870\u843d\u5206\u5e03\u62df\u5408  "
+             "RSSI short-term fading distribution fitting (representative link)",
              fontsize=16, pad=10)
 ax.grid(True, linestyle="--", alpha=0.35)
 style(ax, fs=18)
