@@ -508,6 +508,8 @@ style(ax1, fs=18); style(ax1b, fs=18)
 ax1b.spines["right"].set_visible(True); ax1b.spines["right"].set_linewidth(1.2)
 ax1b.tick_params(axis="y", right=True, labelright=True, direction="in",
                  length=6, width=1.1, labelsize=18)
+ax1.text(0.005, 1.02, "(a)", transform=ax1.transAxes, fontsize=20,
+         ha="left", va="bottom")
 ax1.legend(handles=[l1, l2, l3], fontsize=15, loc="upper left", framealpha=0.95)
 
 # bottom: veg-soil moisture -- soil & trunk (left), composite (right)
@@ -527,6 +529,8 @@ style(ax2, fs=18); style(ax2b, fs=18)
 ax2b.spines["right"].set_visible(True); ax2b.spines["right"].set_linewidth(1.2)
 ax2b.tick_params(axis="y", right=True, labelright=True, direction="in",
                  length=6, width=1.1, labelsize=18)
+ax2.text(0.005, 1.02, "(b)", transform=ax2.transAxes, fontsize=20,
+         ha="left", va="bottom")
 ax2.legend(handles=[m1, m2, m3], fontsize=15, loc="upper right", framealpha=0.95)
 fig.tight_layout()
 fig.savefig("C:/Users/Administrator/fig_climate_day.png", bbox_inches="tight")
