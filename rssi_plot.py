@@ -118,9 +118,10 @@ def plot_date(date, p, save):
     ax.set_title(f"五节点全天 RSSI 日序波动  Daily RSSI variation — {date}", fontsize=13)
     ax.grid(True, linestyle="--", alpha=0.4)
     ax.tick_params(axis="both", direction="in", length=6, width=1.1,
-                   top=True, right=True, labelsize=13)
-    for s in ax.spines.values():
-        s.set_linewidth(1.2)
+                   top=False, right=False, labelsize=13)
+    ax.spines["top"].set_visible(False); ax.spines["right"].set_visible(False)
+    for s in ("left", "bottom"):
+        ax.spines[s].set_linewidth(1.2)
     ax.legend(ncol=2, fontsize=10, loc="lower center", framealpha=0.9)
     fig.tight_layout()
     fig.savefig(save, bbox_inches="tight")
@@ -167,9 +168,10 @@ for di in range(len(date_list)):
 ax.set_xticks(ticks)
 ax.set_xticklabels(ticklabels, fontsize=25)
 ax.tick_params(axis="both", direction="in", length=7, width=1.2,
-               top=True, right=True, labelsize=25)
-for s in ax.spines.values():
-    s.set_linewidth(1.3)
+               top=False, right=False, labelsize=25)
+ax.spines["top"].set_visible(False); ax.spines["right"].set_visible(False)
+for s in ("left", "bottom"):
+    ax.spines[s].set_linewidth(1.3)
 ax.set_xlim(seg_starts[0] - 0.5, seg_starts[-1] + day_span + 0.5)
 
 # date labels centered above each segment
@@ -226,11 +228,12 @@ ax.set_xlim(0.8, 180)
 ax.set_xticks([1, 5, 10, 35, 60, 100, 150])
 ax.set_xticklabels(["1", "5", "10", "35", "60", "100", "150"], fontsize=22)
 ax.tick_params(axis="both", which="both", direction="in", length=6, width=1.1,
-               top=True, right=True, labelsize=22)
+               top=False, right=False, labelsize=22)
 ax.set_xlabel("\u8ddd\u79bb Distance /m", fontsize=25)
 ax.set_ylabel("\u63a5\u6536\u4fe1\u53f7\u5f3a\u5ea6 RSSI /dBm", fontsize=25)
-for s in ax.spines.values():
-    s.set_linewidth(1.2)
+ax.spines["top"].set_visible(False); ax.spines["right"].set_visible(False)
+for s in ("left", "bottom"):
+    ax.spines[s].set_linewidth(1.2)
 ax.grid(True, which="both", linestyle="--", alpha=0.4)
 ax.legend(fontsize=16, loc="upper right", framealpha=0.95)
 fig.tight_layout()

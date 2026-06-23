@@ -47,10 +47,12 @@ C_HIST = "#9DB4D4"    # soft blue-grey bars
 
 
 def style(ax, fs=20):
-    for s in ax.spines.values():
-        s.set_linewidth(1.2)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    for s in ("left", "bottom"):
+        ax.spines[s].set_linewidth(1.2)
     ax.tick_params(axis="both", direction="in", length=6, width=1.1,
-                   top=True, right=True, labelsize=fs)
+                   top=False, right=False, labelsize=fs)
 
 
 # ----------------------------------------------------------------------------

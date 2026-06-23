@@ -52,11 +52,12 @@ ax.set_ylim(-130, -20)
 ax.xaxis.set_major_locator(MultipleLocator(100))
 ax.yaxis.set_major_locator(MultipleLocator(10))
 ax.tick_params(axis="both", labelsize=22, direction="in", length=6, width=1.1,
-               top=True, right=True)
+               top=False, right=False)
 ax.set_xlabel("\u901a\u4fe1\u8ddd\u79bb Distance /m", fontsize=25)
 ax.set_ylabel("RSSI /dBm", fontsize=25)
-for s in ax.spines.values():
-    s.set_linewidth(1.2)
+ax.spines["top"].set_visible(False); ax.spines["right"].set_visible(False)
+for s in ("left", "bottom"):
+    ax.spines[s].set_linewidth(1.2)
 ax.legend(fontsize=19, loc="upper right", frameon=True, framealpha=0.95,
           handletextpad=0.5, borderpad=0.5)
 fig.tight_layout()

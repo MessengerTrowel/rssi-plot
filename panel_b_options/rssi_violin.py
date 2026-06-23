@@ -79,11 +79,13 @@ YL = "\u63a5\u6536\u4fe1\u53f7\u5f3a\u5ea6 RSSI /dBm"
 
 
 def clean(ax):
-    # unified Fig.3 style: full frame, inward ticks on all four sides
-    for s in ax.spines.values():
-        s.set_visible(True); s.set_linewidth(1.2)
+    # unified style: left/bottom frame, inward ticks (top & right removed)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    for s in ("left", "bottom"):
+        ax.spines[s].set_visible(True); ax.spines[s].set_linewidth(1.2)
     ax.tick_params(axis="both", direction="in", length=6, width=1.1,
-                   top=True, right=True, labelsize=22)
+                   top=False, right=False, labelsize=22)
 
 
 # =============================================================== 1) VIOLIN
@@ -159,9 +161,11 @@ for i, (s, c) in enumerate(zip(samples, palette)):
 ax.set_yticks([])
 ax.set_xlabel(YL, fontsize=25)
 ax.set_ylabel("\u6982\u7387\u5bc6\u5ea6 Probability density (\u504f\u79fb Offset)", fontsize=21)
-for s in ax.spines.values():
-    s.set_visible(True); s.set_linewidth(1.2)
-ax.tick_params(axis="x", direction="in", length=6, width=1.1, top=True,
+ax.spines["top"].set_visible(False)
+ax.spines["right"].set_visible(False)
+for s in ("left", "bottom"):
+    ax.spines[s].set_visible(True); ax.spines[s].set_linewidth(1.2)
+ax.tick_params(axis="x", direction="in", length=6, width=1.1, top=False,
                labelsize=22)
 ax.tick_params(axis="y", left=False, right=False)
 ax.grid(axis="x", linestyle="--", alpha=0.3)

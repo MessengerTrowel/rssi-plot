@@ -47,10 +47,12 @@ COL_MOIS = {"低 Low": "#C44E52", "中 Mid": "#2CA02C", "高 High": "#3B4CC0"}
 
 
 def style(ax, fs=20):
-    for s in ax.spines.values():
-        s.set_linewidth(1.2)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    for s in ("left", "bottom"):
+        ax.spines[s].set_linewidth(1.2)
     ax.tick_params(axis="both", direction="in", length=6, width=1.1,
-                   top=True, right=True, labelsize=fs)
+                   top=False, right=False, labelsize=fs)
 
 
 # ----------------------------------------------------------------------------
@@ -476,8 +478,11 @@ for ax, (key, title, cmap) in zip(axes, metrics):
     ax.set_title(title, fontsize=17)
     cb = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
     cb.ax.tick_params(labelsize=13)
-    for s in ax.spines.values():
-        s.set_linewidth(1.2)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    for s in ("left", "bottom"):
+        ax.spines[s].set_linewidth(1.2)
+    ax.tick_params(top=False, right=False)
 fig.tight_layout()
 fig.savefig("C:/Users/Administrator/fig_micro_heatmap.png", bbox_inches="tight")
 plt.close(fig)
@@ -499,6 +504,10 @@ ax1b.set_ylabel("\u6c14\u6e29 /\u2103   \u76f8\u5bf9\u6e7f\u5ea6 /%", fontsize=1
 ax1.set_title("\u5927\u6c14\u5e72\u6e7f\u72b6\u6001 Atmospheric dry/wet state (VPD)", fontsize=18)
 ax1.grid(True, linestyle="--", alpha=0.35)
 style(ax1, fs=18); style(ax1b, fs=18)
+# keep functional secondary (right) y-axis on the twin axes
+ax1b.spines["right"].set_visible(True); ax1b.spines["right"].set_linewidth(1.2)
+ax1b.tick_params(axis="y", right=True, labelright=True, direction="in",
+                 length=6, width=1.1, labelsize=18)
 ax1.legend(handles=[l1, l2, l3], fontsize=15, loc="upper left", framealpha=0.95)
 
 # bottom: veg-soil moisture -- soil & trunk (left), composite (right)
@@ -514,6 +523,10 @@ ax2.set_title("\u690d\u88ab-\u571f\u58e4\u6e7f\u5ea6\u7efc\u5408\u72b6\u6001 Veg
 ax2.set_xlim(0, 24); ax2.set_xticks(range(0, 25, 2))
 ax2.grid(True, linestyle="--", alpha=0.35)
 style(ax2, fs=18); style(ax2b, fs=18)
+# keep functional secondary (right) y-axis on the twin axes
+ax2b.spines["right"].set_visible(True); ax2b.spines["right"].set_linewidth(1.2)
+ax2b.tick_params(axis="y", right=True, labelright=True, direction="in",
+                 length=6, width=1.1, labelsize=18)
 ax2.legend(handles=[m1, m2, m3], fontsize=15, loc="upper right", framealpha=0.95)
 fig.tight_layout()
 fig.savefig("C:/Users/Administrator/fig_climate_day.png", bbox_inches="tight")
