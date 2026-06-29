@@ -1,0 +1,25 @@
+field_name,data_type,unit,source,description,required,example_value
+tree_id,int64,,ForestFormer3D instance segmentation,Unique tree identifier,Yes,1
+x,float64,m,ForestFormer3D + coordinate transform,Tree trunk center X in local projected CRS,Yes,456123.45
+y,float64,m,ForestFormer3D + coordinate transform,Tree trunk center Y in local projected CRS,Yes,4567890.12
+z,float64,m,ForestFormer3D,Tree base elevation (min Z of trunk points),Yes,1234.5
+longitude,float64,degrees,CRS transform from x/y,WGS84 longitude,Yes,115.4321
+latitude,float64,degrees,CRS transform from x/y,WGS84 latitude,Yes,40.9876
+tree_height_m,float64,m,Point cloud geometry,Max Z - Min Z of tree instance,Yes,12.5
+crown_radius_m,float64,m,Point cloud geometry,Estimated crown radius from canopy point spread,Yes,3.2
+crown_area_m2,float64,m2,Point cloud geometry,Projected crown area from canopy convex hull,Yes,32.1
+trunk_diameter_proxy_m,float64,m,Point cloud geometry,Estimated trunk diameter from trunk-class points,Yes,0.25
+observed_dbh_cm,float64,cm,Field measurement (Baicaowa inventory),Measured DBH from field survey; NULL if unavailable,No,
+species,string,,Field measurement (Baicaowa inventory),Tree species; NULL if unavailable,No,
+forest_type,string,,Site classification,Forest type category (e.g. coniferous / broadleaf / mixed),No,
+prediction_confidence,float64,[0-1],ForestFormer3D instance score,Model confidence for this tree detection,Yes,0.85
+semantic_class,string,,ForestFormer3D semantic segmentation,Majority semantic class (wood / leaf),Yes,wood
+num_points,int64,,Point cloud,Number of points in this tree instance,Yes,15234
+bbox_min_x,float64,m,Point cloud geometry,Bounding box min X,Yes,456120.1
+bbox_min_y,float64,m,Point cloud geometry,Bounding box min Y,Yes,4567887.3
+bbox_min_z,float64,m,Point cloud geometry,Bounding box min Z,Yes,1234.5
+bbox_max_x,float64,m,Point cloud geometry,Bounding box max X,Yes,456126.8
+bbox_max_y,float64,m,Point cloud geometry,Bounding box max Y,Yes,4567892.9
+bbox_max_z,float64,m,Point cloud geometry,Bounding box max Z,Yes,1247.0
+site_id,string,,Metadata,Research site identifier,Yes,baicaowa
+split,string,,Spatial partition,train / val / test,Yes,train

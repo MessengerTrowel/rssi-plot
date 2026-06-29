@@ -1,0 +1,64 @@
+file_path,size_bytes,category,description
+.gitignore,47,config,Git ignore rules
+Dockerfile,4721,config,Official Docker environment (PyTorch 1.13.1 + CUDA 11.6)
+LICENSE,17848,license,CC BY-NC 4.0
+readme.md,13177,documentation,Setup and usage instructions
+configs/oneformer3d_qs_radius16_qp300_2many.py,7971,config,Main config - radius=16 qp=300 one-to-many matching
+configs/oneformer3d_radius16_qp300.py,8942,config,Alternative config - radius=16 qp=300
+data/ForAINetV2/batch_load_ForAINetV2_data.py,7412,preprocessing,Batch data loader - converts PLY to NPY
+data/ForAINetV2/load_forainetv2_data.py,9287,preprocessing,Single-scan PLY loader and exporter
+data/ForAINetV2/plyutils.py,10716,preprocessing,Binary PLY reader/writer
+data/ForAINetV2/compare_outputs.py,3410,evaluation,Output comparison utility
+data/ForAINetV2/second_inference.py,1715,inference,Second-pass inference on remaining points
+data/ForAINetV2/run_and_compare.sh,911,script,Run and compare evaluation script
+data/ForAINetV2/meta_data/train_list.txt,1746,metadata,47 training scan names
+data/ForAINetV2/meta_data/val_list.txt,572,metadata,16 validation scan names
+data/ForAINetV2/meta_data/test_list.txt,1001,metadata,28 test scan names
+oneformer3d/__init__.py,1073,model,Module init - registers all components
+oneformer3d/oneformer3d.py,226082,model,Main model - ForAINetV2OneFormer3D_XAwarequery
+oneformer3d/oneformer3d_speedup_v1.py,220579,model,Speedup variant of main model
+oneformer3d/oneformer3d_withoutspeedup.py,232855,model,Non-speedup variant
+oneformer3d/spconv_unet.py,8735,model,SpConv UNet backbone
+oneformer3d/mink_unet.py,18607,model,Minkowski UNet backbone (alternative)
+oneformer3d/query_decoder.py,49911,model,ForAINetv2QueryDecoder_XAwarequery
+oneformer3d/instance_criterion.py,53395,model,Instance segmentation losses incl. One2ManyMatcher
+oneformer3d/semantic_criterion.py,3929,model,Semantic segmentation loss (S3DISSemanticCriterion)
+oneformer3d/unified_criterion.py,11162,model,Combined semantic + instance criterion
+oneformer3d/panoptic_losses.py,15316,model,Panoptic loss functions
+oneformer3d/data_preprocessor.py,3251,model,Det3DDataPreprocessor wrapper
+oneformer3d/transforms_3d.py,30563,model,3D augmentations (CylinderCrop GridSample etc.)
+oneformer3d/loading.py,3796,model,Point cloud loading transforms
+oneformer3d/formatting.py,5842,model,Data formatting for pipeline
+oneformer3d/forainetv2_dataset.py,1226,model,ForAINetV2 dataset class registration
+oneformer3d/structures.py,941,model,Data structures
+oneformer3d/mask_matrix_nms.py,4948,model,Matrix NMS for instance dedup
+oneformer3d/evaluate_semantic_instance.py,17077,evaluation,Semantic+instance evaluation functions
+oneformer3d/instance_seg_eval.py,5898,evaluation,Instance segmentation evaluation
+oneformer3d/instance_seg_metric.py,3980,evaluation,Instance segmentation metric
+oneformer3d/unified_metric.py,13993,evaluation,UnifiedSegMetric - main evaluation class
+replace_mmdetection_files/base_model.py,14275,patch,Patched mmengine BaseModel
+replace_mmdetection_files/loops.py,17858,patch,Patched mmengine runner loops
+replace_mmdetection_files/transforms_3d.py,106246,patch,Patched mmdet3d transforms
+segmentator/__init__.py,78,dependency,Segmentator module init
+segmentator/csrc/segmentator.cpp,11408,dependency,C++ superpoint segmentation
+segmentator/main.py,1599,dependency,Segmentator main entry
+segmentator/utils.py,1190,dependency,Segmentator utilities
+segmentator/test_equivariance.py,1885,dependency,Equivariance test
+segmentator/README.md,1953,dependency,Segmentator documentation
+tools/train.py,5264,entry,Training entry point
+tools/test.py,6991,entry,Testing/inference entry point
+tools/create_data_forainetv2.py,2193,preprocessing,Data info PKL creator (requires mmdet3d)
+tools/converter_forainetv2.py,2338,preprocessing,ForAINetV2 data converter
+tools/forainetv2_data_utils.py,7608,preprocessing,ForAINetV2Data class for info generation
+tools/update_infos_to_v2.py,21424,preprocessing,Info file v2 format updater
+tools/fix_spconv_checkpoint.py,695,utility,SpConv checkpoint weight permutation fix
+tools/inference_bluepoint.sh,3680,inference,Two-pass blue-point inference script
+tools/merge_prediction.py,14361,postprocess,Merge multi-pass predictions
+tools/merge_prediction_slow.py,9778,postprocess,Slow merge variant
+tools/copy_predictions.py,1024,postprocess,Copy prediction outputs
+tools/prepare_safe_testfile_names.sh,2557,utility,Safe filename preparation
+tools/base_modules.py,5928,utility,Base module definitions
+tools/final_eval.py,26539,evaluation,Final evaluation script
+tools/dist_train.sh,459,script,Distributed training launcher
+tools/analysis_tools/analyze_logs.py,7693,analysis,Training log analysis
+tools/plyutils.py,10716,utility,PLY utilities (duplicate of data/ForAINetV2/plyutils.py)

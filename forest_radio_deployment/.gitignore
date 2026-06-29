@@ -1,0 +1,38 @@
+# Large data files - do not commit
+data/raw/for_instance_v2/*.zip
+data/raw/for_instance_v2/forestformer_code/
+data/raw/for_instance_v2/test_data/
+data/raw/for_instance_v2/train_val_data/
+data/raw/for_instance_v2/clean_forestformer/
+data/raw/for_instance_v2/*_manifest.csv
+data/raw/baicaowa/
+data/interim/
+data/processed/
+
+# External repositories (cloned separately)
+external/
+
+# Model checkpoints
+models/
+outputs/checkpoints/
+
+# Large output files
+outputs/radio_maps/
+outputs/tree_maps/
+outputs/candidate_nodes/*.npz
+outputs/candidate_nodes/*.graphml
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.eggs/
+*.egg-info/
+
+# Environment
+.env
+*.log
+
+# IDE
+.vscode/
+.idea/

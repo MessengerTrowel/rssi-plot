@@ -1,0 +1,6 @@
+Repository: SmartForest-no/ForestFormer3D
+URL: https://github.com/SmartForest-no/ForestFormer3D
+Commit: 6a75c3735e4a4108d02ee944a8b93177f2360a4f
+Branch: main
+Clone Date: 2026-06-28
+License: CC BY-NC 4.0
