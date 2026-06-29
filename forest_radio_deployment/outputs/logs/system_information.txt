@@ -1,0 +1,30 @@
+﻿=== System Information ===
+Date: 2026-06-28 23:09:25 UTC
+
+=== GPU ===
+No NVIDIA GPU detected (nvidia-smi not available)
+
+=== CPU ===
+Name: Intel(R) Xeon(R) Platinum 8259CL CPU @ 2.50GHz
+Cores: 8
+Logical Processors: 8
+
+=== Memory ===
+Total RAM: 32 GB
+
+=== Disk ===
+Drive C: Used=14.7 GB, Free=113.1 GB, Total=127.8 GB
+Drive D: Used=0 GB, Free=0 GB, Total=0 GB
+
+=== Python ===
+Python 3.12.8
+
+=== Git ===
+git version 2.47.1.windows.1
+
+=== OS ===
+Microsoft Windows Server 2022 Standard 10.0.20348
+
+=== CUDA ===
+
+
