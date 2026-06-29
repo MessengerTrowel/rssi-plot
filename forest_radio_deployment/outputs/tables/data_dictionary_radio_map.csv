@@ -1,0 +1,21 @@
+field_name,data_type,unit,source,description,required,example_value
+pixel_x,int64,,Raster grid,Pixel column index,Yes,100
+pixel_y,int64,,Raster grid,Pixel row index,Yes,200
+geo_x,float64,m,CRS transform,Geographic X coordinate of pixel center,Yes,456150.0
+geo_y,float64,m,CRS transform,Geographic Y coordinate of pixel center,Yes,4567850.0
+tx_id,string,,Configuration,Transmitter ID for this radio map,Yes,TX01
+tx_x,float64,m,Node positions,Transmitter X,Yes,456100.0
+tx_y,float64,m,Node positions,Transmitter Y,Yes,4567800.0
+l_prior_db,float64,dB,LaPS model,Physics-based prior path loss at this pixel,Yes,-85.3
+delta_l_db,float64,dB,Forest-UNetDCN prediction,Predicted residual (correction to LaPS prior),Yes,3.2
+l_predicted_db,float64,dB,l_prior + delta_l,Total predicted path loss,Yes,-82.1
+sigma_predicted_db,float64,dB,Forest-UNetDCN uncertainty branch,Predicted aleatoric uncertainty (std dev),Yes,4.5
+p_rx_predicted_dbm,float64,dBm,tx_power - l_predicted,Predicted received power,Yes,-62.1
+p_lcb_dbm,float64,dBm,p_rx - kappa*sigma,Conservative (lower confidence bound) received power,Yes,-71.1
+coverage_binary,int64,,p_lcb >= threshold,1 if pixel is reliably covered; 0 otherwise,Yes,1
+data_source,string,,Metadata,"measurement / laps_prior / model_prediction / interpolation / pseudo_label",Yes,model_prediction
+observation_weight,float64,[0-1],Training config,Weight of this pixel in loss computation,No,0.1
+dem_m,float64,m,DEM raster,Terrain elevation at pixel,Yes,1238.5
+chm_m,float64,m,CHM raster,Canopy height at pixel,Yes,15.2
+canopy_cover,float64,[0-1],Canopy cover raster,Canopy cover fraction,Yes,0.75
+distance_to_tx_m,float64,m,Computed,2D distance from Tx,Yes,70.7

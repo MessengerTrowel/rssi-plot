@@ -9,6 +9,9 @@ data/raw/baicaowa/
 data/interim/
 data/processed/
 
+# External repositories (cloned separately)
+external/
+
 # Model checkpoints
 models/
 outputs/checkpoints/

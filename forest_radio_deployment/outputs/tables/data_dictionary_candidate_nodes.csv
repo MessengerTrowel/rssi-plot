@@ -1,0 +1,23 @@
+field_name,data_type,unit,source,description,required,example_value
+candidate_id,int64,,Generated,Unique candidate node identifier,Yes,1
+x,float64,m,Optimization output,Candidate X coordinate (projected CRS),Yes,456150.0
+y,float64,m,Optimization output,Candidate Y coordinate (projected CRS),Yes,4567850.0
+z,float64,m,DEM lookup,Terrain elevation at candidate position,Yes,1238.5
+longitude,float64,degrees,CRS transform,WGS84 longitude,Yes,115.4350
+latitude,float64,degrees,CRS transform,WGS84 latitude,Yes,40.9880
+forest_type,string,,Forest classification,Forest type at candidate position,Yes,mixed
+slope_deg,float64,degrees,Slope raster,Ground slope at position,Yes,12.5
+roughness,float64,,Roughness raster,Terrain roughness index,Yes,0.15
+canopy_height_m,float64,m,CHM,Canopy height at position,Yes,14.2
+canopy_cover,float64,[0-1],Canopy cover raster,Canopy cover fraction at position,Yes,0.70
+communication_score,float64,,Computed,Composite communication quality score,Yes,0.82
+weighted_coverage,float64,,Computed,Weighted coverage of demand points from this node,Yes,0.75
+gateway_reliability,float64,[0-1],Computed,Probability of reliable gateway link,Yes,0.90
+prediction_uncertainty,float64,dB,Forest-UNetDCN,Mean predicted uncertainty around this node,Yes,4.2
+deployment_cost,float64,,Cost model,Relative deployment cost (terrain + accessibility),Yes,0.35
+feasibility_score,float64,[0-1],Feasibility raster,Deployment feasibility (1=ideal; 0=infeasible),Yes,0.88
+neighbor_count,int64,,Graph analysis,Number of reliable links to other candidates,Yes,5
+optimization_iteration,int64,,Optimization log,Iteration at which this candidate converged,Yes,150
+initial_seed_id,int64,,Initialization,ID of the Poisson-disk seed this originated from,Yes,42
+gradient_magnitude,float64,,Optimization log,Final gradient magnitude (convergence indicator),Yes,0.001
+j_score,float64,,Objective function,"J = alpha*coverage + beta*gateway - gamma*cost - delta*uncertainty",Yes,0.72

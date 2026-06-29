@@ -1,0 +1,32 @@
+field_name,data_type,unit,source,description,required,example_value
+link_id,string,,Generated,Unique link identifier (tx_id-rx_id),Yes,TX01-RX03
+tx_id,string,,Node positions,Transmitter node ID,Yes,TX01
+rx_id,string,,Node positions,Receiver node ID,Yes,RX03
+tx_x,float64,m,Node positions,Transmitter X coordinate (projected CRS),Yes,456100.0
+tx_y,float64,m,Node positions,Transmitter Y coordinate (projected CRS),Yes,4567800.0
+tx_z,float64,m,Node positions + DEM,Transmitter Z coordinate (elevation),Yes,1240.0
+rx_x,float64,m,Node positions,Receiver X coordinate (projected CRS),Yes,456200.0
+rx_y,float64,m,Node positions,Receiver Y coordinate (projected CRS),Yes,4567900.0
+rx_z,float64,m,Node positions + DEM,Receiver Z coordinate (elevation),Yes,1235.0
+distance_m,float64,m,Computed,3D Euclidean distance between Tx and Rx,Yes,141.4
+elevation_diff_m,float64,m,Computed,Rx elevation - Tx elevation,Yes,-5.0
+trunk_intersect_count,int64,,LaPS ray tracing,Number of trunks intersected by direct path,Yes,3
+trunk_traverse_length_m,float64,m,LaPS ray tracing,Total length of path through trunk volumes,Yes,0.75
+canopy_traverse_length_m,float64,m,LaPS ray tracing,Total length of path through canopy volumes,Yes,45.2
+canopy_cover_ratio,float64,[0-1],CHM / canopy cover raster,Fraction of link path under canopy,Yes,0.82
+terrain_obstruction,float64,[0-1],DEM analysis,Binary/continuous terrain blockage indicator,Yes,0.0
+fresnel_clearance_ratio,float64,,Fresnel zone analysis,First Fresnel zone clearance ratio (>1 = clear),Yes,0.65
+understory_traverse_length_m,float64,m,Forest structure layers,Length through understory vegetation,Yes,12.3
+mean_slope_deg,float64,degrees,DEM,Average ground slope along link path,Yes,15.2
+forest_type,string,,Forest classification,Dominant forest type along link,Yes,mixed
+stem_density_per_ha,float64,trees/ha,Tree map,Average stem density along link corridor,Yes,850.0
+mean_tree_height_m,float64,m,Tree map,Mean tree height along link corridor,Yes,14.5
+mean_crown_radius_m,float64,m,Tree map,Mean crown radius along link corridor,Yes,2.8
+l_prior_db,float64,dB,LaPS model,LaPS physics-based path loss prediction,Yes,-95.3
+rssi_measured_dbm,float64,dBm,LoRa measurements,Measured RSSI (NULL for unmeasured links),No,-87.5
+frequency_mhz,float64,MHz,LoRa config,Operating frequency,Yes,470.0
+tx_power_dbm,float64,dBm,LoRa config,Transmit power,Yes,20.0
+spreading_factor,int64,,LoRa config,LoRa spreading factor,Yes,12
+bandwidth_khz,float64,kHz,LoRa config,LoRa bandwidth,Yes,125.0
+antenna_height_tx_m,float64,m,Node positions,Tx antenna height above ground,Yes,1.5
+antenna_height_rx_m,float64,m,Node positions,Rx antenna height above ground,Yes,1.5
